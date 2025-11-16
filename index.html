@@ -76,26 +76,26 @@
             background-color: var(--ios-gray-bg);
         }
 
+        /* Header con logo más grande */
         #app-header {
             background: rgba(249, 249, 249, 0.8);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             border-bottom: 1px solid var(--ios-separator);
-            padding: 12px 16px;
-            padding-top: calc(env(safe-area-inset-top, 0px) + 12px);
+            padding: 10px 16px; /* Ajuste de padding */
+            padding-top: calc(env(safe-area-inset-top, 0px) + 10px);
             text-align: center;
             position: sticky;
             top: 0;
             z-index: 10;
-            height: calc(env(safe-area-inset-top, 0px) + 50px); /* Altura fija */
+            height: calc(env(safe-area-inset-top, 0px) + 65px); /* Header más alto */
             display: flex;
             justify-content: center;
             align-items: center;
         }
         
-        /* NUEVO: Estilo para el logo en el header */
         #header-logo {
-            height: 30px; /* Ajusta la altura del logo */
+            height: 45px; /* Logo más grande (antes 30px) */
             object-fit: contain;
         }
 
@@ -120,7 +120,6 @@
             margin-bottom: 16px;
         }
         
-        /* Label para formularios */
         label.form-label {
             font-size: 0.9rem;
             font-weight: 500;
@@ -130,7 +129,7 @@
             text-align: left;
         }
 
-        /* --- Tab Bar (Navegación Nativa) --- */
+        /* --- Tab Bar --- */
         #tab-bar {
             display: flex;
             justify-content: space-around;
@@ -157,9 +156,8 @@
         .tab-item svg { width: 24px; height: 24px; fill: currentColor; }
         .tab-item.active { color: var(--ios-blue); }
 
-        /* --- Componentes UI (iOS Style) --- */
+        /* --- Componentes UI --- */
         
-        /* Inputs y Botones */
         input[type="email"],
         input[type="password"],
         input[type="text"],
@@ -200,17 +198,10 @@
         
         button.btn:hover, .btn:hover { background-color: var(--ios-blue-dark); }
         button.btn:active, .btn:active { transform: scale(0.98); }
-        
-        button.btn-secondary {
-            background-color: var(--ios-gray-bg-darker);
-            color: var(--ios-blue);
-            font-weight: 500;
-        }
-        
+        button.btn-secondary { background-color: var(--ios-gray-bg-darker); color: var(--ios-blue); font-weight: 500; }
         button.btn-danger { background-color: var(--ios-red); }
         button.btn-small { padding: 8px 12px; font-size: 0.9rem; width: auto; }
 
-        /* Cards */
         .card {
             background: var(--ios-white);
             border-radius: 12px;
@@ -234,7 +225,7 @@
             display: flex; flex-direction: column; align-items: center;
             padding: 12px; background: var(--ios-gray-bg); border-radius: 10px;
         }
-        .stat-item label { font-size: 0.85rem; font-weight: 500; color: var(--ios-secondary-label); margin-bottom: 4px; }
+        .stat-item label { font-size: 0.85rem; font-weight: 500; color: var(--ios-secondary-label); margin-bottom: 4px; text-align: center; }
         .stat-item .amount { font-size: 1.3rem; font-weight: 600; color: var(--ios-label-color); }
         .stat-item .amount-profit { color: var(--ios-green); }
         .stat-item .amount-expense { color: var(--ios-red); }
@@ -246,11 +237,11 @@
         .withdraw-item .input-group input { flex: 1; }
         .withdraw-item .input-group button { width: auto; flex-shrink: 0; font-weight: 500; }
 
-        /* --- NUEVO: Estilos de Inventario (Acordeón) --- */
-        .inventory-list {
+        /* --- Estilos de Inventario (Acordeón) --- */
+        .page-content-list {
             display: flex;
             flex-direction: column;
-            gap: 16px; /* Espacio entre acordeones */
+            gap: 16px;
         }
         
         .category-accordion {
@@ -328,6 +319,7 @@
             object-fit: cover;
             flex-shrink: 0;
             border: 1px solid var(--ios-separator);
+            cursor: zoom-in; /* Cursor para indicar zoom */
         }
         .product-card-info {
             flex: 1;
@@ -389,6 +381,7 @@
             border-radius: 8px;
             object-fit: cover;
             flex-shrink: 0;
+            cursor: zoom-in; /* Cursor para zoom */
         }
         .restock-item-card .info {
             flex: 1;
@@ -437,6 +430,36 @@
             font-weight: 700;
             color: var(--ios-green);
         }
+        
+        /* --- NUEVO: Estilos de Reportes --- */
+        .report-card-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--ios-white);
+            border-radius: 10px;
+            padding: 12px;
+            border: 1px solid var(--ios-separator);
+        }
+        .report-info h5 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--ios-label-color);
+        }
+        .report-info p {
+            font-size: 0.85rem;
+            color: var(--ios-secondary-label);
+            margin-top: 2px;
+        }
+        .report-amount {
+            font-size: 1.1rem;
+            font-weight: 600;
+            flex-shrink: 0;
+            margin-left: 10px;
+        }
+        .report-amount.amount-profit { color: var(--ios-green); }
+        .report-amount.amount-expense { color: var(--ios-red); }
+
 
         /* --- Estilos de Modales --- */
         .modal-overlay {
@@ -490,6 +513,8 @@
         }
         .modal-footer button:first-child { border-left: none; }
         .modal-footer button.btn-confirm-danger { color: var(--ios-red); font-weight: 600; }
+        
+        /* Modal de Imagen */
         #image-modal .modal-content-img { width: 100%; max-width: 500px; border-radius: 14px; }
         #image-modal .modal-content { background: none; box-shadow: none; }
         
@@ -501,7 +526,7 @@
     <!--     PANTALLA DE LOGIN   -->
     <!-- ======================= -->
     <section id="login-screen">
-        <img src="https://resoner0796.github.io/Tienda-KalCTas/LOGO.png" alt="KalCTas Logo">
+        <img src="" alt="KalCTas Logo"> <!-- Se carga con JS -->
         <h2>Iniciar Sesión</h2>
         <form id="login-form">
             <input type="email" id="login-email" placeholder="Correo electrónico" required>
@@ -516,7 +541,6 @@
     <div id="app-container" style="display: none;">
         
         <header id="app-header">
-            <!-- Título reemplazado por Logo -->
             <img id="header-logo" src="" alt="KalCTas Logo">
         </header>
 
@@ -527,7 +551,6 @@
             <!-- ======================= -->
             <section id="admin-screen" class="page">
                 
-                <!-- Resumen General con Capital -->
                 <div class="card">
                     <div class="card-header">Resumen General</div>
                     <div class="card-content stat-grid">
@@ -547,7 +570,6 @@
                             <label>Utilidad Negocio</label>
                             <span id="admin-utilidad-negocio" class="amount amount-profit">$0.00</span>
                         </div>
-                        <!-- NUEVA TARJETA DE CAPITAL -->
                         <div class="stat-item">
                             <label>Capital</label>
                             <span id="admin-total-capital" class="amount">$0.00</span>
@@ -555,7 +577,6 @@
                     </div>
                 </div>
 
-                <!-- Retirar Ganancias -->
                 <div class="card">
                     <div class="card-header">Retirar Ganancias (Socios)</div>
                     <div class="card-content">
@@ -582,7 +603,6 @@
                     </div>
                 </div>
 
-                <!-- Registrar Gasto -->
                 <div class="card">
                     <div class="card-header">Registrar Gasto (Descontar de Utilidad Negocio)</div>
                     <form id="add-expense-form">
@@ -597,7 +617,6 @@
                     </form>
                 </div>
 
-                <!-- NUEVA TARJETA DE CONFIGURACIÓN DE COSTOS -->
                 <div class="card">
                     <div class="card-header">Configuración de Costos</div>
                     <form id="cost-config-form">
@@ -628,8 +647,7 @@
                     <button class="btn" style="flex: 1;" onclick="showPage('restock-screen')">ReStock</button>
                 </div>
                 
-                <!-- Contenedor para los acordeones por categoría -->
-                <div id="inventory-accordion" class="inventory-list">
+                <div id="inventory-accordion" class="page-content-list">
                     <!-- Los acordeones de productos se cargarán aquí desde JS -->
                 </div>
             </section>
@@ -703,14 +721,37 @@
             </section>
 
             <!-- ======================= -->
-            <!--   Página: Reporte (Placeholder) -->
+            <!--   Página: Reporte (NUEVA) -->
             <!-- ======================= -->
             <section id="report-screen" class="page">
-                <div class="card">
-                    <div class="card-content">
-                        <h2>📄 Reporte Detallado</h2>
-                        <p>Próximamente...</p>
+                <div class="page-content-list">
+                    
+                    <!-- Acordeón de Reporte de Ventas -->
+                    <div class="category-accordion open"> <!-- Abierto por defecto -->
+                        <button class="category-header" onclick="toggleCategory(this)">
+                            <h4>Reporte de Ventas</h4>
+                            <svg class="chevron" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                        </button>
+                        <div class="category-content-wrapper">
+                            <div class="category-content-inner" id="sales-report-list">
+                                <!-- Las tarjetas de ventas se cargarán aquí -->
+                            </div>
+                        </div>
                     </div>
+                    
+                    <!-- Acordeón de Historial de Movimientos -->
+                    <div class="category-accordion">
+                        <button class="category-header" onclick="toggleCategory(this)">
+                            <h4>Historial de Movimientos</h4>
+                            <svg class="chevron" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                        </button>
+                        <div class="category-content-wrapper">
+                            <div class="category-content-inner" id="movements-report-list">
+                                <!-- Los movimientos se cargarán aquí -->
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </section>
 
@@ -867,7 +908,6 @@
     let unsubscribes = [];
     let productModels = [];
     let onConfirmCallback = null;
-    // Valores por defecto, se sobreescriben desde DB
     let CAPITAL_PER_PRODUCT = 42;
     let SHIPPING_COST = 70;
 
@@ -877,7 +917,7 @@
         getEl('login-screen').querySelector('img').src = logoImg;
         
         if (user) {
-            getEl('header-logo').src = logoImg; // Cargar logo en header
+            getEl('header-logo').src = logoImg;
             getEl('login-screen').style.display = 'none';
             getEl('app-container').style.display = 'flex';
             showPage('admin-screen');
@@ -899,7 +939,7 @@
     function confirmLogout() {
         showConfirm("¿Seguro que quieres cerrar sesión?", () => {
             auth.signOut();
-        }, true); // true para "danger"
+        }, true);
     }
 
     // --- Navegación Principal (Tab Bar) ---
@@ -910,8 +950,6 @@
         document.querySelectorAll('.tab-item').forEach(tab => tab.classList.remove('active'));
         const newActiveTab = document.querySelector(`.tab-item[onclick="showPage('${pageId}')"]`);
         if (newActiveTab) newActiveTab.classList.add('active');
-
-        // (El título ya no se usa, ahora es el logo)
         
         unsubscribes.forEach(unsub => unsub());
         unsubscribes = [];
@@ -919,13 +957,16 @@
         if (pageId === 'admin-screen') {
             loadAdminData();
             loadExpenseConcepts();
-            loadCostConfig(); // NUEVO: Cargar costos
+            loadCostConfig();
         } else if (pageId === 'inventory-screen') {
             loadInventory();
         } else if (pageId === 'add-product-screen') {
             getEl('add-product-form').reset();
         } else if (pageId === 'restock-screen') {
             await loadRestockScreenData();
+        } else if (pageId === 'report-screen') {
+            loadSalesReport();
+            loadMovementsReport();
         }
     }
 
@@ -940,7 +981,6 @@
             getEl('admin-utilidad-negocio').textContent = `$${(data.utilidadNegocioTotal || 0).toFixed(2)}`;
             getEl('admin-utilidad-ulises').textContent = `$${(data.utilidadUlisesTotal || 0).toFixed(2)}`;
             getEl('admin-utilidad-dariana').textContent = `$${(data.utilidadDarianaTotal || 0).toFixed(2)}`;
-            // NUEVO: Cargar Capital
             getEl('admin-total-capital').textContent = `$${(data.capital || 0).toFixed(2)}`;
         }, error => {
             console.error("Error al cargar resumen financiero:", error);
@@ -961,7 +1001,6 @@
     }
 
     async function retirarGanancias(socio) {
-        // ... (Sin cambios)
         const amountElId = (socio === 'Ulises') ? 'withdraw-ulises-amount' : 'withdraw-dariana-amount';
         const amountEl = getEl(amountElId);
         const amount = parseFloat(amountEl.value);
@@ -1000,7 +1039,6 @@
     }
 
     getEl('add-expense-form').addEventListener('submit', async (e) => {
-        // ... (Sin cambios)
         e.preventDefault();
         const monto = parseFloat(getEl('expense-amount').value);
         const concepto = getEl('expense-concept').value;
@@ -1031,7 +1069,6 @@
         }
     });
 
-    // --- NUEVO: Lógica para Configuración de Costos ---
     async function loadCostConfig() {
         try {
             const configRef = db.collection('configuracion').doc('tienda');
@@ -1041,10 +1078,14 @@
                 if (data.costoPorProducto) {
                     CAPITAL_PER_PRODUCT = data.costoPorProducto;
                     getEl('config-product-cost').value = data.costoPorProducto;
+                } else {
+                    getEl('config-product-cost').value = CAPITAL_PER_PRODUCT; // Mostrar default
                 }
                 if (data.costoEnvio) {
                     SHIPPING_COST = data.costoEnvio;
                     getEl('config-shipping-cost').value = data.costoEnvio;
+                } else {
+                    getEl('config-shipping-cost').value = SHIPPING_COST; // Mostrar default
                 }
             }
         } catch (error) {
@@ -1101,30 +1142,24 @@
                 return;
             }
             
-            // Agrupar productos por categoría
             const productsByCategory = snapshot.docs.reduce((acc, doc) => {
                 const product = { id: doc.id, ...doc.data() };
-                productModels.push(product); // Llenar el cache global
+                productModels.push(product);
                 
                 const category = product.categoria || 'Otros';
-                if (!acc[category]) {
-                    acc[category] = [];
-                }
+                if (!acc[category]) acc[category] = [];
                 acc[category].push(product);
                 return acc;
             }, {});
 
-            listContainer.innerHTML = ''; // Limpiar "Cargando..."
+            listContainer.innerHTML = '';
             
-            // Orden deseado de categorías
             const categoryOrder = ['KalCTas2-4', 'KalCTas3-4', 'KalCTasLargas'];
 
             categoryOrder.forEach(categoryName => {
-                if (!productsByCategory[categoryName]) return; // Saltar si no hay productos
-
+                if (!productsByCategory[categoryName]) return;
                 const products = productsByCategory[categoryName];
                 
-                // 1. Crear el HTML de las tarjetas de producto para esta categoría
                 const productsHTML = products.map(product => {
                     const isVisible = product.visible !== false;
                     const isAgotado = product.stock === 0;
@@ -1133,7 +1168,9 @@
                     return `
                         <div class="product-card ${!isVisible ? 'hidden' : ''}">
                             <div class="product-card-main" onclick="toggleDetails(this)">
-                                <img src="${imageUrl}" alt="${product.nombre}" class="product-card-image" onerror="this.src='https://placehold.co/60x60/e5e5ea/8e8e93?text=N/A'">
+                                <img src="${imageUrl}" alt="${product.nombre}" class="product-card-image" 
+                                     onclick="verImagen('${imageUrl}', event)" 
+                                     onerror="this.src='https://placehold.co/60x60/e5e5ea/8e8e93?text=N/A'">
                                 <div class="product-card-info">
                                     <h4>${product.nombre} ${!isVisible ? '(Oculto)' : ''}</h4>
                                     <span class="stock ${isAgotado ? 'agotado' : ''}">${isAgotado ? 'Agotado' : 'Stock: ' + product.stock}</span>
@@ -1149,7 +1186,6 @@
                     `;
                 }).join('');
 
-                // 2. Crear el bloque completo del acordeón
                 const accordionBlock = document.createElement('div');
                 accordionBlock.className = 'category-accordion';
                 accordionBlock.innerHTML = `
@@ -1173,7 +1209,6 @@
         }
     }
 
-    // NUEVO: Función para abrir/cerrar acordeón de categoría
     function toggleCategory(headerElement) {
         const accordion = headerElement.closest('.category-accordion');
         accordion.classList.toggle('open');
@@ -1185,17 +1220,15 @@
     }
 
     getEl('add-product-form').addEventListener('submit', async (e) => {
-        // ... (Sin cambios)
         e.preventDefault();
         const btn = e.target.querySelector('button[type="submit"]');
         btn.disabled = true;
         btn.textContent = "Guardando...";
         try {
-            const imageUrl = getEl('add-product-image-url').value;
             await db.collection('productos').add({
                 nombre: getEl('add-product-name').value,
                 categoria: getEl('add-product-category').value,
-                imagenUrl: imageUrl,
+                imagenUrl: getEl('add-product-image-url').value,
                 stock: parseInt(getEl('add-product-stock').value),
                 precio: parseFloat(getEl('add-product-price').value),
                 cantidadVendida: 0,
@@ -1214,7 +1247,6 @@
     });
 
     async function editProduct(id) {
-        // ... (Sin cambios)
         try {
             const docSnap = await db.collection('productos').doc(id).get();
             if (docSnap.exists) {
@@ -1238,7 +1270,6 @@
     }
 
     getEl('edit-product-form').addEventListener('submit', async (e) => {
-        // ... (Sin cambios)
         e.preventDefault();
         const id = getEl('edit-product-id').value;
         try {
@@ -1263,7 +1294,6 @@
     });
 
     async function toggleProductVisibility(id, isVisible) {
-        // ... (Sin cambios)
         try {
             await db.collection('productos').doc(id).update({ visible: !isVisible });
             showMessage(`Producto ahora está ${!isVisible ? 'VISIBLE' : 'OCULTO'}.`);
@@ -1276,11 +1306,10 @@
     function confirmDeleteProduct(id, nombre) {
         showConfirm(`¿Seguro que quieres eliminar "${nombre}"? Esta acción no se puede deshacer.`, () => {
             deleteProduct(id);
-        }, true); // true para "danger"
+        }, true);
     }
 
     async function deleteProduct(id) {
-        // ... (Sin cambios)
         try {
             await db.collection('productos').doc(id).delete();
             showMessage('Producto eliminado.');
@@ -1290,7 +1319,8 @@
         }
     }
 
-    function verImagen(src) {
+    function verImagen(src, event) {
+        if (event) event.stopPropagation(); // Evita que se abra/cierre el acordeón de detalles
         getEl('modal-image').src = src;
         getEl('image-modal').style.display = 'flex';
     }
@@ -1301,7 +1331,6 @@
     // --- LÓGICA DE RESTOCK ---
 
     async function loadRestockScreenData() {
-        // ... (Sin cambios)
         if (productModels.length === 0) {
             await loadInventory();
         }
@@ -1316,7 +1345,6 @@
     }
 
     function addRestockLineVisual() {
-        // ... (Sin cambios)
         const select = getEl('restock-product-select');
         const productId = select.value;
         if (!productId) return;
@@ -1332,7 +1360,9 @@
         card.dataset.id = productId;
         const imageUrl = IMAGES_BASE_URL + product.imagenUrl;
         card.innerHTML = `
-            <img src="${imageUrl}" alt="${product.nombre}" onerror="this.src='https://placehold.co/50x50/e5e5ea/8e8e93?text=N/A'">
+            <img src="${imageUrl}" alt="${product.nombre}" 
+                 onclick="verImagen('${imageUrl}', event)"
+                 onerror="this.src='https://placehold.co/50x50/e5e5ea/8e8e93?text=N/A'">
             <div class="info">
                 <h5>${product.nombre}</h5>
                 <div class="inputs">
@@ -1352,7 +1382,6 @@
     }
 
     function calculateRestockTotal() {
-        // ... (Sin cambios)
         let total = 0;
         document.querySelectorAll('.restock-item-card').forEach(card => {
             const quantity = parseInt(card.querySelector('.restock-quantity').value) || 0;
@@ -1365,7 +1394,6 @@
     }
 
     getEl('add-restock-form').addEventListener('submit', async (e) => {
-        // ... (Sin cambios)
         e.preventDefault();
         const btn = e.target.querySelector('button[type="submit"]');
         const lines = document.querySelectorAll('.restock-item-card');
@@ -1395,6 +1423,7 @@
         try {
             const batch = db.batch();
             const restockRef = db.collection('restocks').doc();
+            
             batch.set(restockRef, {
                 items: restockItems,
                 costoTotal: totalCost,
@@ -1402,15 +1431,30 @@
                 fecha: firebase.firestore.FieldValue.serverTimestamp(),
                 folio: `RS-${Date.now()}`
             });
+
+            // Log de movimiento de capital
+            const movimientoRestockRef = db.collection('movimientos').doc();
+            batch.set(movimientoRestockRef, {
+                monto: -totalCost, // Gasto de capital
+                concepto: 'ReStock de Inventario',
+                tipo: 'Capital',
+                nota: `Folio ReStock ${restockRef.id.substring(0, 5)}...`,
+                fecha: firebase.firestore.FieldValue.serverTimestamp(),
+                relatedRestockId: restockRef.id
+            });
+
             restockItems.forEach(item => {
                 const productRef = db.collection('productos').doc(item.id);
                 batch.update(productRef, { stock: firebase.firestore.FieldValue.increment(item.cantidad) });
             });
+            
             const finanzasRef = db.collection('finanzas').doc('resumen');
             batch.update(finanzasRef, {
                 capital: firebase.firestore.FieldValue.increment(-totalCost)
             });
+            
             await batch.commit();
+
             showMessage('¡Re-stock registrado y stock actualizado con éxito!');
             showPage('inventory-screen');
         } catch (error) {
@@ -1421,6 +1465,79 @@
             btn.textContent = "Registrar ReStock";
         }
     });
+
+    // --- NUEVO: LÓGICA DE REPORTES ---
+
+    function loadSalesReport() {
+        const listContainer = getEl('sales-report-list');
+        listContainer.innerHTML = '<p>Cargando ventas...</p>';
+
+        const unsub = db.collection('pedidos').where('estado', '==', 'Entregado').orderBy('fechaActualizacion', 'desc').limit(50)
+            .onSnapshot(snapshot => {
+                if (snapshot.empty) {
+                    listContainer.innerHTML = '<p>No hay ventas entregadas.</p>';
+                    return;
+                }
+                listContainer.innerHTML = '';
+                snapshot.forEach(doc => {
+                    const pedido = doc.data();
+                    const cliente = pedido.clienteManual || (pedido.datosCliente?.nombre || 'N/A');
+                    const fecha = pedido.fechaActualizacion ? pedido.fechaActualizacion.toDate().toLocaleDateString() : 'N/A';
+                    const total = (pedido.montoTotal || 0).toFixed(2);
+                    
+                    const card = document.createElement('div');
+                    card.className = 'report-card-item';
+                    card.innerHTML = `
+                        <div class="report-info">
+                            <h5>${pedido.folio || 'Venta Manual'} (${cliente})</h5>
+                            <p>${pedido.canalVenta || 'Tienda'} - ${fecha}</p>
+                        </div>
+                        <span class="report-amount amount-profit">$${total}</span>
+                    `;
+                    listContainer.appendChild(card);
+                });
+            }, error => {
+                console.error("Error al cargar reporte de ventas:", error);
+                listContainer.innerHTML = '<p>Error al cargar reporte de ventas.</p>';
+            });
+        unsubscribes.push(unsub);
+    }
+
+    function loadMovementsReport() {
+        const listContainer = getEl('movements-report-list');
+        listContainer.innerHTML = '<p>Cargando movimientos...</p>';
+        
+        const unsub = db.collection('movimientos').orderBy('fecha', 'desc').limit(100)
+            .onSnapshot(snapshot => {
+                if (snapshot.empty) {
+                    listContainer.innerHTML = '<p>No hay movimientos registrados.</p>';
+                    return;
+                }
+                listContainer.innerHTML = '';
+                snapshot.forEach(doc => {
+                    const m = doc.data();
+                    const amountClass = m.monto >= 0 ? 'amount-profit' : 'amount-expense';
+                    const amountSign = m.monto >= 0 ? '+' : '';
+                    const fecha = m.fecha ? m.fecha.toDate().toLocaleDateString() : 'N/A';
+                    
+                    const card = document.createElement('div');
+                    card.className = 'report-card-item';
+                    card.innerHTML = `
+                        <div class="report-info">
+                            <h5>${m.concepto}</h5>
+                            <p>${m.tipo} - ${fecha}</p>
+                            ${m.nota ? `<p style="font-size: 0.8em; color: var(--ios-gray-text);">${m.nota}</p>` : ''}
+                        </div>
+                        <span class="report-amount ${amountClass}">${amountSign}$${(m.monto || 0).toFixed(2)}</span>
+                    `;
+                    listContainer.appendChild(card);
+                });
+            }, error => {
+                console.error("Error al cargar movimientos:", error);
+                listContainer.innerHTML = '<p>Error al cargar movimientos.</p>';
+            });
+        unsubscribes.push(unsub);
+    }
 
 
     // --- LÓGICA DE MODALES ---
