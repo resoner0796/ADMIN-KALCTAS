@@ -87,9 +87,17 @@
             position: sticky;
             top: 0;
             z-index: 10;
+            height: calc(env(safe-area-inset-top, 0px) + 50px); /* Altura fija */
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
         
-        #app-header h1 { font-size: 1.1rem; font-weight: 600; color: var(--ios-label-color); }
+        /* NUEVO: Estilo para el logo en el header */
+        #header-logo {
+            height: 30px; /* Ajusta la altura del logo */
+            object-fit: contain;
+        }
 
         #app-content {
             flex: 1;
@@ -110,6 +118,16 @@
             align-items: center;
             gap: 10px;
             margin-bottom: 16px;
+        }
+        
+        /* Label para formularios */
+        label.form-label {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--ios-secondary-label);
+            margin-bottom: -5px;
+            display: block;
+            text-align: left;
         }
 
         /* --- Tab Bar (Navegación Nativa) --- */
@@ -165,7 +183,6 @@
             box-shadow: 0 0 0 2px rgba(0,122,255,0.2);
         }
         
-        /* Estilo de flecha para Select */
         select {
             background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238e8e93' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
             background-repeat: no-repeat;
@@ -211,7 +228,7 @@
         
         .card-content { padding: 16px; display: flex; flex-direction: column; gap: 15px; }
 
-        /* Estilos de Admin (sin cambios) */
+        /* Estilos de Admin */
         .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
         .stat-item {
             display: flex; flex-direction: column; align-items: center;
@@ -229,23 +246,73 @@
         .withdraw-item .input-group input { flex: 1; }
         .withdraw-item .input-group button { width: auto; flex-shrink: 0; font-weight: 500; }
 
-        /* --- NUEVO: Estilos de Inventario --- */
+        /* --- NUEVO: Estilos de Inventario (Acordeón) --- */
         .inventory-list {
             display: flex;
             flex-direction: column;
-            gap: 10px;
-            margin-top: 16px;
+            gap: 16px; /* Espacio entre acordeones */
         }
-        .product-card {
+        
+        .category-accordion {
             background: var(--ios-white);
             border-radius: 10px;
             box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-            overflow: hidden;
             border: 1px solid var(--ios-separator);
+            overflow: hidden;
+        }
+        
+        .category-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px;
+            background: var(--ios-white);
+            border: none;
+            width: 100%;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+        
+        .category-header .chevron {
+            width: 16px;
+            height: 16px;
+            color: var(--ios-gray-text);
+            transition: transform 0.3s ease-out;
+        }
+        
+        .category-accordion.open .category-header .chevron {
+            transform: rotate(90deg);
+        }
+        
+        .category-content-wrapper {
+            display: grid;
+            grid-template-rows: 0fr; /* Colapsado por defecto */
+            transition: grid-template-rows 0.3s ease-out;
+            overflow: hidden;
+        }
+        
+        .category-accordion.open .category-content-wrapper {
+            grid-template-rows: 1fr; /* Abierto */
+        }
+        
+        .category-content-inner {
+            overflow: hidden;
+            padding: 0 10px 10px 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            border-top: 1px solid var(--ios-separator);
+        }
+
+        .product-card {
+            background: var(--ios-gray-bg);
+            border-radius: 10px;
+            overflow: hidden;
         }
         .product-card.hidden {
             opacity: 0.6;
-            border-style: dashed;
+            border: 1px dashed var(--ios-gray-text);
         }
         .product-card-main {
             display: flex;
@@ -288,21 +355,20 @@
             color: var(--ios-green);
         }
         .product-card-details {
-            display: none; /* Se activa con JS */
-            background: var(--ios-gray-bg);
+            display: none;
+            background: var(--ios-gray-bg-darker);
             padding: 10px 12px;
-            border-top: 1px solid var(--ios-separator);
             display: flex;
             flex-wrap: wrap;
             gap: 8px;
         }
         .product-card-details button {
-            flex: 1 1 auto; /* Permite que los botones se ajusten */
+            flex: 1 1 auto;
             padding: 6px 10px;
             font-size: 0.8rem;
         }
 
-        /* --- NUEVO: Estilos de ReStock --- */
+        /* --- Estilos de ReStock --- */
         #restock-items-list {
             display: flex;
             flex-direction: column;
@@ -372,9 +438,9 @@
             color: var(--ios-green);
         }
 
-        /* --- NUEVO: Estilos de Modales --- */
+        /* --- Estilos de Modales --- */
         .modal-overlay {
-            display: none; /* Oculto por defecto */
+            display: none;
             position: fixed;
             z-index: 1000;
             left: 0; top: 0;
@@ -393,20 +459,13 @@
             border-radius: 14px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.2);
             width: 100%;
-            max-width: 300px; /* Ancho de alerta iOS */
+            max-width: 300px;
             text-align: center;
             overflow: hidden;
         }
 
-        .modal-header {
-            padding: 16px 20px 4px 20px;
-        }
-        .modal-header h3 {
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: var(--ios-label-color);
-        }
-
+        .modal-header { padding: 16px 20px 4px 20px; }
+        .modal-header h3 { font-size: 1.1rem; font-weight: 600; color: var(--ios-label-color); }
         .modal-body {
             padding: 0 20px 16px 20px;
             font-size: 0.95rem;
@@ -415,55 +474,24 @@
             flex-direction: column;
             gap: 15px;
         }
-        
-        /* Inputs dentro de modales */
-        .modal-body input, .modal-body select {
-            font-size: 0.95rem;
-            padding: 10px 12px;
-        }
+        .modal-body input, .modal-body select { font-size: 0.95rem; padding: 10px 12px; }
         .modal-body label {
-            font-size: 0.85rem;
-            font-weight: 500;
-            color: var(--ios-secondary-label);
-            text-align: left;
+            font-size: 0.85rem; font-weight: 500;
+            color: var(--ios-secondary-label); text-align: left;
             margin-bottom: -10px;
         }
 
-        .modal-footer {
-            display: flex;
-            border-top: 1px solid var(--ios-separator);
-        }
-        
+        .modal-footer { display: flex; border-top: 1px solid var(--ios-separator); }
         .modal-footer button {
-            flex: 1;
-            background: none;
-            border: none;
+            flex: 1; background: none; border: none;
             border-left: 1px solid var(--ios-separator);
-            padding: 12px;
-            font-size: 1.05rem;
-            font-weight: 500;
-            color: var(--ios-blue);
-            cursor: pointer;
+            padding: 12px; font-size: 1.05rem; font-weight: 500;
+            color: var(--ios-blue); cursor: pointer;
         }
-        .modal-footer button:first-child {
-            border-left: none;
-        }
-        .modal-footer button.btn-confirm-danger {
-            color: var(--ios-red);
-            font-weight: 600;
-        }
-
-        /* Modal de Imagen */
-        #image-modal .modal-content-img {
-            width: 100%;
-            max-width: 500px;
-            border-radius: 14px;
-        }
-        /* Ocultar el fondo del modal de imagen */
-        #image-modal .modal-content {
-            background: none;
-            box-shadow: none;
-        }
+        .modal-footer button:first-child { border-left: none; }
+        .modal-footer button.btn-confirm-danger { color: var(--ios-red); font-weight: 600; }
+        #image-modal .modal-content-img { width: 100%; max-width: 500px; border-radius: 14px; }
+        #image-modal .modal-content { background: none; box-shadow: none; }
         
     </style>
 </head>
@@ -488,7 +516,8 @@
     <div id="app-container" style="display: none;">
         
         <header id="app-header">
-            <h1 id="header-title">Administración</h1>
+            <!-- Título reemplazado por Logo -->
+            <img id="header-logo" src="" alt="KalCTas Logo">
         </header>
 
         <main id="app-content">
@@ -497,6 +526,8 @@
             <!--   Página: Administración -->
             <!-- ======================= -->
             <section id="admin-screen" class="page">
+                
+                <!-- Resumen General con Capital -->
                 <div class="card">
                     <div class="card-header">Resumen General</div>
                     <div class="card-content stat-grid">
@@ -516,8 +547,15 @@
                             <label>Utilidad Negocio</label>
                             <span id="admin-utilidad-negocio" class="amount amount-profit">$0.00</span>
                         </div>
+                        <!-- NUEVA TARJETA DE CAPITAL -->
+                        <div class="stat-item">
+                            <label>Capital</label>
+                            <span id="admin-total-capital" class="amount">$0.00</span>
+                        </div>
                     </div>
                 </div>
+
+                <!-- Retirar Ganancias -->
                 <div class="card">
                     <div class="card-header">Retirar Ganancias (Socios)</div>
                     <div class="card-content">
@@ -543,6 +581,8 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Registrar Gasto -->
                 <div class="card">
                     <div class="card-header">Registrar Gasto (Descontar de Utilidad Negocio)</div>
                     <form id="add-expense-form">
@@ -556,11 +596,31 @@
                         </div>
                     </form>
                 </div>
+
+                <!-- NUEVA TARJETA DE CONFIGURACIÓN DE COSTOS -->
+                <div class="card">
+                    <div class="card-header">Configuración de Costos</div>
+                    <form id="cost-config-form">
+                        <div class="card-content">
+                            <label class="form-label" for="config-product-cost">Costo por Producto (Capital)</label>
+                            <input type="number" id="config-product-cost" step="0.01" required>
+                            <button type="submit" class="btn btn-secondary">Guardar Costo Producto</button>
+                        </div>
+                    </form>
+                    <form id="shipping-cost-config-form">
+                        <div class="card-content" style="border-top: 1px solid var(--ios-separator);">
+                            <label class="form-label" for="config-shipping-cost">Costo de Envío (Domicilio)</label>
+                            <input type="number" id="config-shipping-cost" step="0.01" required>
+                            <button type="submit" class="btn btn-secondary">Guardar Costo Envío</button>
+                        </div>
+                    </form>
+                </div>
+
                 <button class="btn btn-danger" onclick="confirmLogout()">Cerrar Sesión</button>
             </section>
 
             <!-- ======================= -->
-            <!--   Página: Inventario (AHORA IMPLEMENTADA) -->
+            <!--   Página: Inventario (CON ACORDEÓN) -->
             <!-- ======================= -->
             <section id="inventory-screen" class="page">
                 <div class="page-header">
@@ -568,13 +628,14 @@
                     <button class="btn" style="flex: 1;" onclick="showPage('restock-screen')">ReStock</button>
                 </div>
                 
+                <!-- Contenedor para los acordeones por categoría -->
                 <div id="inventory-accordion" class="inventory-list">
-                    <!-- Los productos se cargarán aquí desde JS -->
+                    <!-- Los acordeones de productos se cargarán aquí desde JS -->
                 </div>
             </section>
             
             <!-- ======================= -->
-            <!--   Página: Agregar Producto (NUEVA) -->
+            <!--   Página: Agregar Producto -->
             <!-- ======================= -->
             <section id="add-product-screen" class="page">
                 <button class="btn btn-secondary" style="width: auto; margin-bottom: 16px;" onclick="showPage('inventory-screen')">&lt; Volver al Inventario</button>
@@ -582,18 +643,20 @@
                     <div class="card-header">Agregar Nuevo Producto</div>
                     <form id="add-product-form">
                         <div class="card-content">
+                            <label class="form-label" for="add-product-name">Nombre del producto:</label>
                             <input type="text" id="add-product-name" placeholder="Nombre del producto" required>
+                            <label class="form-label" for="add-product-category">Categoría:</label>
                             <select id="add-product-category" required>
                                 <option value="" disabled selected>Selecciona una categoría</option>
                                 <option value="KalCTas2-4">KalCTas 2/4</option>
                                 <option value="KalCTas3-4">KalCTas 3/4</option>
                                 <option value="KalCTasLargas">KalCTas Largas</option>
                             </select>
-                            <label for="add-product-image-url">Ruta de la imagen:</label>
+                            <label class="form-label" for="add-product-image-url">Ruta de la imagen:</label>
                             <input type="text" id="add-product-image-url" placeholder="assets/categoria/modelo.png" required>
-                            <label for="add-product-stock">Inventario (Stock):</label>
+                            <label class="form-label" for="add-product-stock">Inventario (Stock):</label>
                             <input type="number" id="add-product-stock" placeholder="Inventario" required>
-                            <label for="add-product-price">Precio ($):</label>
+                            <label class="form-label" for="add-product-price">Precio ($):</label>
                             <input type="number" id="add-product-price" placeholder="Precio" step="0.01" required>
                             <button type="submit" class="btn">Guardar Producto</button>
                         </div>
@@ -602,7 +665,7 @@
             </section>
 
             <!-- ======================= -->
-            <!--   Página: ReStock (NUEVA DISEÑADA) -->
+            <!--   Página: ReStock -->
             <!-- ======================= -->
             <section id="restock-screen" class="page">
                 <button class="btn btn-secondary" style="width: auto; margin-bottom: 16px;" onclick="showPage('inventory-screen')">&lt; Volver al Inventario</button>
@@ -613,13 +676,11 @@
                         <div class="card-content">
                             <select id="restock-product-select">
                                 <option value="">Selecciona un modelo...</option>
-                                <!-- Opciones cargadas por JS -->
                             </select>
                             <button type="button" class="btn btn-secondary" onclick="addRestockLineVisual()">Agregar a la lista</button>
                         </div>
                     </div>
 
-                    <!-- Lista visual de productos para ReStock -->
                     <div id="restock-items-list">
                         <!-- Las tarjetas de ReStock se agregan aquí -->
                     </div>
@@ -627,7 +688,7 @@
                     <div class="card">
                         <div class="card-header">Costos y Total</div>
                         <div class="card-content">
-                            <label for="restock-shipping-cost">Costo de Envío ($)</label>
+                            <label class="form-label" for="restock-shipping-cost">Costo de Envío ($)</label>
                             <input type="number" id="restock-shipping-cost" placeholder="0.00" step="0.01" value="0" oninput="calculateRestockTotal()">
                             
                             <div class="restock-total-card">
@@ -710,7 +771,6 @@
     <!--   MODALES GLOBALES      -->
     <!-- ======================= -->
 
-    <!-- Modal de Mensaje (Alert) -->
     <div id="message-box" class="modal-overlay" style="display: none;">
         <div class="modal-content">
             <div class="modal-header">
@@ -725,7 +785,6 @@
         </div>
     </div>
 
-    <!-- Modal de Confirmación (Confirm) -->
     <div id="confirm-modal" class="modal-overlay" style="display: none;">
         <div class="modal-content">
             <div class="modal-header">
@@ -736,12 +795,11 @@
             </div>
             <div class="modal-footer">
                 <button onclick="cancelAction()">Cancelar</button>
-                <button id="confirm-btn-yes" class="btn-confirm-danger" onclick="confirmAction()">Sí</button>
+                <button id="confirm-btn-yes" onclick="confirmAction()">Sí</button>
             </div>
         </div>
     </div>
 
-    <!-- Modal de Editar Producto -->
     <div id="edit-product-modal" class="modal-overlay" style="display: none;">
         <div class="modal-content" style="max-width: 320px;">
             <div class="modal-header">
@@ -750,19 +808,19 @@
             <form id="edit-product-form">
                 <div class="modal-body">
                     <input type="hidden" id="edit-product-id">
-                    <label>Nombre:</label>
+                    <label class="form-label">Nombre:</label>
                     <input type="text" id="edit-product-name" required>
-                    <label>Categoría:</label>
+                    <label class="form-label">Categoría:</label>
                     <select id="edit-product-category" required>
                         <option value="KalCTas2-4">KalCTas 2/4</option>
                         <option value="KalCTas3-4">KalCTas 3/4</option>
                         <option value="KalCTasLargas">KalCTas Largas</option>
                     </select>
-                    <label>Ruta Imagen:</label>
+                    <label class="form-label">Ruta Imagen:</label>
                     <input type="text" id="edit-product-image-url">
-                    <label>Stock:</label>
+                    <label class="form-label">Stock:</label>
                     <input type="number" id="edit-product-stock" required>
-                    <label>Precio ($):</label>
+                    <label class="form-label">Precio ($):</label>
                     <input type="number" id="edit-product-price" step="0.01" required>
                 </div>
                 <div class="modal-footer">
@@ -773,7 +831,6 @@
         </div>
     </div>
 
-    <!-- Modal de Ver Imagen -->
     <div id="image-modal" class="modal-overlay" style="display: none;" onclick="cerrarModal()">
         <img class="modal-content-img" id="modal-image" src="" alt="Vista previa">
     </div>
@@ -808,12 +865,19 @@
     const getEl = (id) => document.getElementById(id);
     const IMAGES_BASE_URL = 'https://resoner0796.github.io/Tienda-KalCTas/';
     let unsubscribes = [];
-    let productModels = []; // Cache global de productos
-    let onConfirmCallback = null; // Para el modal de confirmación
+    let productModels = [];
+    let onConfirmCallback = null;
+    // Valores por defecto, se sobreescriben desde DB
+    let CAPITAL_PER_PRODUCT = 42;
+    let SHIPPING_COST = 70;
 
     // --- Autenticación ---
     auth.onAuthStateChanged(user => {
+        const logoImg = IMAGES_BASE_URL + 'LOGO.png';
+        getEl('login-screen').querySelector('img').src = logoImg;
+        
         if (user) {
+            getEl('header-logo').src = logoImg; // Cargar logo en header
             getEl('login-screen').style.display = 'none';
             getEl('app-container').style.display = 'flex';
             showPage('admin-screen');
@@ -835,7 +899,7 @@
     function confirmLogout() {
         showConfirm("¿Seguro que quieres cerrar sesión?", () => {
             auth.signOut();
-        });
+        }, true); // true para "danger"
     }
 
     // --- Navegación Principal (Tab Bar) ---
@@ -845,20 +909,17 @@
 
         document.querySelectorAll('.tab-item').forEach(tab => tab.classList.remove('active'));
         const newActiveTab = document.querySelector(`.tab-item[onclick="showPage('${pageId}')"]`);
-        if (newActiveTab) {
-            newActiveTab.classList.add('active');
-        }
+        if (newActiveTab) newActiveTab.classList.add('active');
 
-        const pageTitle = newActiveTab ? newActiveTab.querySelector('span').innerText : "Admin";
-        getEl('header-title').innerText = pageTitle;
+        // (El título ya no se usa, ahora es el logo)
         
         unsubscribes.forEach(unsub => unsub());
         unsubscribes = [];
 
-        // Carga de datos incremental
         if (pageId === 'admin-screen') {
             loadAdminData();
             loadExpenseConcepts();
+            loadCostConfig(); // NUEVO: Cargar costos
         } else if (pageId === 'inventory-screen') {
             loadInventory();
         } else if (pageId === 'add-product-screen') {
@@ -868,7 +929,7 @@
         }
     }
 
-    // --- LÓGICA DE ADMINISTRACIÓN (Implementada) ---
+    // --- LÓGICA DE ADMINISTRACIÓN (Actualizada) ---
 
     function loadAdminData() {
         const unsub = db.collection('finanzas').doc('resumen').onSnapshot(doc => {
@@ -879,6 +940,8 @@
             getEl('admin-utilidad-negocio').textContent = `$${(data.utilidadNegocioTotal || 0).toFixed(2)}`;
             getEl('admin-utilidad-ulises').textContent = `$${(data.utilidadUlisesTotal || 0).toFixed(2)}`;
             getEl('admin-utilidad-dariana').textContent = `$${(data.utilidadDarianaTotal || 0).toFixed(2)}`;
+            // NUEVO: Cargar Capital
+            getEl('admin-total-capital').textContent = `$${(data.capital || 0).toFixed(2)}`;
         }, error => {
             console.error("Error al cargar resumen financiero:", error);
             showMessage("Error al cargar datos de administración.");
@@ -898,30 +961,26 @@
     }
 
     async function retirarGanancias(socio) {
+        // ... (Sin cambios)
         const amountElId = (socio === 'Ulises') ? 'withdraw-ulises-amount' : 'withdraw-dariana-amount';
         const amountEl = getEl(amountElId);
         const amount = parseFloat(amountEl.value);
-
         if (isNaN(amount) || amount <= 0) {
             showMessage("Por favor, introduce un monto válido para retirar.");
             return;
         }
-
         showConfirm(`¿Seguro que quieres retirar $${amount.toFixed(2)} de ${socio}?`, async () => {
             const finanzasRef = db.collection('finanzas').doc('resumen');
             const movimientoRef = db.collection('movimientos').doc();
             const utilidadField = (socio === 'Ulises') ? 'utilidadUlisesTotal' : 'utilidadDarianaTotal';
-
             try {
                 await db.runTransaction(async (transaction) => {
                     const finanzasDoc = await transaction.get(finanzasRef);
                     if (!finanzasDoc.exists) throw new Error("Documento de finanzas no encontrado.");
-                    
                     const currentUtilidad = finanzasDoc.data()[utilidadField] || 0;
                     if (currentUtilidad < amount) {
                         throw new Error(`Saldo insuficiente. ${socio} solo tiene $${currentUtilidad.toFixed(2)}.`);
                     }
-
                     transaction.set(movimientoRef, {
                         monto: -amount, concepto: `Retiro Utilidad ${socio}`,
                         tipo: 'Retiro', socio: socio,
@@ -941,19 +1000,17 @@
     }
 
     getEl('add-expense-form').addEventListener('submit', async (e) => {
+        // ... (Sin cambios)
         e.preventDefault();
         const monto = parseFloat(getEl('expense-amount').value);
         const concepto = getEl('expense-concept').value;
         const nota = getEl('expense-note').value;
-
         if (isNaN(monto) || monto <= 0 || !concepto) {
             showMessage("Por favor, completa el monto y el concepto.");
             return;
         }
-
         const finanzasRef = db.collection('finanzas').doc('resumen');
         const movimientoRef = db.collection('movimientos').doc();
-
         try {
             await db.runTransaction(async (transaction) => {
                 transaction.set(movimientoRef, {
@@ -974,57 +1031,152 @@
         }
     });
 
-    // --- LÓGICA DE INVENTARIO (NUEVA) ---
+    // --- NUEVO: Lógica para Configuración de Costos ---
+    async function loadCostConfig() {
+        try {
+            const configRef = db.collection('configuracion').doc('tienda');
+            const doc = await configRef.get();
+            if (doc.exists) {
+                const data = doc.data();
+                if (data.costoPorProducto) {
+                    CAPITAL_PER_PRODUCT = data.costoPorProducto;
+                    getEl('config-product-cost').value = data.costoPorProducto;
+                }
+                if (data.costoEnvio) {
+                    SHIPPING_COST = data.costoEnvio;
+                    getEl('config-shipping-cost').value = data.costoEnvio;
+                }
+            }
+        } catch (error) {
+            console.error("Error al cargar costos:", error);
+            showMessage("Error al cargar la configuración de costos.");
+        }
+    }
+
+    getEl('cost-config-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const newCost = parseFloat(getEl('config-product-cost').value);
+        if (isNaN(newCost) || newCost < 0) {
+            showMessage("Por favor, introduce un costo de producto válido.");
+            return;
+        }
+        try {
+            await db.collection('configuracion').doc('tienda').set({ costoPorProducto: newCost }, { merge: true });
+            CAPITAL_PER_PRODUCT = newCost;
+            showMessage('Costo por producto actualizado con éxito.');
+        } catch (error) {
+            showMessage('Error al guardar el costo del producto.');
+        }
+    });
+
+    getEl('shipping-cost-config-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const newCost = parseFloat(getEl('config-shipping-cost').value);
+        if (isNaN(newCost) || newCost < 0) {
+            showMessage("Por favor, introduce un costo de envío válido.");
+            return;
+        }
+        try {
+            await db.collection('configuracion').doc('tienda').set({ costoEnvio: newCost }, { merge: true });
+            SHIPPING_COST = newCost;
+            showMessage('Costo de envío actualizado con éxito.');
+        } catch (error) {
+            showMessage('Error al guardar el costo de envío.');
+        }
+    });
+
+
+    // --- LÓGICA DE INVENTARIO (CON ACORDEÓN) ---
 
     async function loadInventory() {
         const listContainer = getEl('inventory-accordion');
         listContainer.innerHTML = '<p>Cargando inventario...</p>';
-        productModels = []; // Reset cache
+        productModels = [];
 
         try {
             const snapshot = await db.collection('productos').orderBy('categoria').orderBy('nombre').get();
-            listContainer.innerHTML = '';
-
+            
             if (snapshot.empty) {
                 listContainer.innerHTML = '<p>No hay productos registrados.</p>';
                 return;
             }
             
-            snapshot.forEach(doc => {
+            // Agrupar productos por categoría
+            const productsByCategory = snapshot.docs.reduce((acc, doc) => {
                 const product = { id: doc.id, ...doc.data() };
                 productModels.push(product); // Llenar el cache global
                 
-                const isVisible = product.visible !== false;
-                const isAgotado = product.stock === 0;
-                
-                const card = document.createElement('div');
-                card.className = 'product-card';
-                if (!isVisible) card.classList.add('hidden');
-                
-                const imageUrl = IMAGES_BASE_URL + product.imagenUrl;
+                const category = product.categoria || 'Otros';
+                if (!acc[category]) {
+                    acc[category] = [];
+                }
+                acc[category].push(product);
+                return acc;
+            }, {});
 
-                card.innerHTML = `
-                    <div class="product-card-main" onclick="toggleDetails(this)">
-                        <img src="${imageUrl}" alt="${product.nombre}" class="product-card-image" onerror="this.src='https://placehold.co/60x60/e5e5ea/8e8e93?text=N/A'">
-                        <div class="product-card-info">
-                            <h4>${product.nombre} ${!isVisible ? '(Oculto)' : ''}</h4>
-                            <span class="stock ${isAgotado ? 'agotado' : ''}">${isAgotado ? 'Agotado' : 'Stock: ' + product.stock}</span>
-                            <span class="price">$${product.precio.toFixed(2)}</span>
+            listContainer.innerHTML = ''; // Limpiar "Cargando..."
+            
+            // Orden deseado de categorías
+            const categoryOrder = ['KalCTas2-4', 'KalCTas3-4', 'KalCTasLargas'];
+
+            categoryOrder.forEach(categoryName => {
+                if (!productsByCategory[categoryName]) return; // Saltar si no hay productos
+
+                const products = productsByCategory[categoryName];
+                
+                // 1. Crear el HTML de las tarjetas de producto para esta categoría
+                const productsHTML = products.map(product => {
+                    const isVisible = product.visible !== false;
+                    const isAgotado = product.stock === 0;
+                    const imageUrl = IMAGES_BASE_URL + product.imagenUrl;
+                    
+                    return `
+                        <div class="product-card ${!isVisible ? 'hidden' : ''}">
+                            <div class="product-card-main" onclick="toggleDetails(this)">
+                                <img src="${imageUrl}" alt="${product.nombre}" class="product-card-image" onerror="this.src='https://placehold.co/60x60/e5e5ea/8e8e93?text=N/A'">
+                                <div class="product-card-info">
+                                    <h4>${product.nombre} ${!isVisible ? '(Oculto)' : ''}</h4>
+                                    <span class="stock ${isAgotado ? 'agotado' : ''}">${isAgotado ? 'Agotado' : 'Stock: ' + product.stock}</span>
+                                    <span class="price">$${product.precio.toFixed(2)}</span>
+                                </div>
+                            </div>
+                            <div class="product-card-details">
+                                <button class="btn btn-small btn-secondary" onclick="editProduct('${product.id}')">Editar</button>
+                                <button class="btn btn-small btn-secondary" onclick="toggleProductVisibility('${product.id}', ${isVisible})">${isVisible ? 'Ocultar' : 'Mostrar'}</button>
+                                <button class="btn btn-small btn-danger" onclick="confirmDeleteProduct('${product.id}', '${product.nombre}')">Eliminar</button>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+
+                // 2. Crear el bloque completo del acordeón
+                const accordionBlock = document.createElement('div');
+                accordionBlock.className = 'category-accordion';
+                accordionBlock.innerHTML = `
+                    <button class="category-header" onclick="toggleCategory(this)">
+                        <h4>${categoryName} (${products.length})</h4>
+                        <svg class="chevron" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                    </button>
+                    <div class="category-content-wrapper">
+                        <div class="category-content-inner">
+                            ${productsHTML}
                         </div>
                     </div>
-                    <div class="product-card-details">
-                        <button class="btn btn-small btn-secondary" onclick="editProduct('${product.id}')">Editar</button>
-                        <button class="btn btn-small btn-secondary" onclick="toggleProductVisibility('${product.id}', ${isVisible})">${isVisible ? 'Ocultar' : 'Mostrar'}</button>
-                        <button class="btn btn-small btn-danger" onclick="confirmDeleteProduct('${product.id}', '${product.nombre}')">Eliminar</button>
-                    </div>
                 `;
-                listContainer.appendChild(card);
+                listContainer.appendChild(accordionBlock);
             });
+
         } catch (error) {
             console.error("Error al cargar inventario:", error);
             listContainer.innerHTML = '<p>Error al cargar inventario.</p>';
             showMessage("Error al cargar inventario: " + error.message);
         }
+    }
+
+    // NUEVO: Función para abrir/cerrar acordeón de categoría
+    function toggleCategory(headerElement) {
+        const accordion = headerElement.closest('.category-accordion');
+        accordion.classList.toggle('open');
     }
 
     function toggleDetails(element) {
@@ -1033,11 +1185,11 @@
     }
 
     getEl('add-product-form').addEventListener('submit', async (e) => {
+        // ... (Sin cambios)
         e.preventDefault();
         const btn = e.target.querySelector('button[type="submit"]');
         btn.disabled = true;
         btn.textContent = "Guardando...";
-
         try {
             const imageUrl = getEl('add-product-image-url').value;
             await db.collection('productos').add({
@@ -1062,6 +1214,7 @@
     });
 
     async function editProduct(id) {
+        // ... (Sin cambios)
         try {
             const docSnap = await db.collection('productos').doc(id).get();
             if (docSnap.exists) {
@@ -1073,7 +1226,6 @@
                 getEl('edit-product-image-url').value = '';
                 getEl('edit-product-stock').value = data.stock;
                 getEl('edit-product-price').value = data.precio;
-                
                 getEl('edit-product-modal').style.display = 'flex';
             }
         } catch (error) {
@@ -1086,6 +1238,7 @@
     }
 
     getEl('edit-product-form').addEventListener('submit', async (e) => {
+        // ... (Sin cambios)
         e.preventDefault();
         const id = getEl('edit-product-id').value;
         try {
@@ -1110,6 +1263,7 @@
     });
 
     async function toggleProductVisibility(id, isVisible) {
+        // ... (Sin cambios)
         try {
             await db.collection('productos').doc(id).update({ visible: !isVisible });
             showMessage(`Producto ahora está ${!isVisible ? 'VISIBLE' : 'OCULTO'}.`);
@@ -1122,10 +1276,11 @@
     function confirmDeleteProduct(id, nombre) {
         showConfirm(`¿Seguro que quieres eliminar "${nombre}"? Esta acción no se puede deshacer.`, () => {
             deleteProduct(id);
-        });
+        }, true); // true para "danger"
     }
 
     async function deleteProduct(id) {
+        // ... (Sin cambios)
         try {
             await db.collection('productos').doc(id).delete();
             showMessage('Producto eliminado.');
@@ -1143,47 +1298,39 @@
         getEl('image-modal').style.display = 'none';
     }
 
-    // --- LÓGICA DE RESTOCK (NUEVA) ---
+    // --- LÓGICA DE RESTOCK ---
 
     async function loadRestockScreenData() {
-        // Asegurarnos que los modelos de productos estén cargados
+        // ... (Sin cambios)
         if (productModels.length === 0) {
-            await loadInventory(); // Carga los productos si no están en caché
+            await loadInventory();
         }
-        
         const select = getEl('restock-product-select');
         select.innerHTML = '<option value="">Selecciona un modelo...</option>';
         productModels.forEach(p => {
             select.innerHTML += `<option value="${p.id}">${p.nombre} (${p.categoria})</option>`;
         });
-        
-        // Limpiar formulario
         getEl('restock-items-list').innerHTML = '';
         getEl('add-restock-form').reset();
         calculateRestockTotal();
     }
 
     function addRestockLineVisual() {
+        // ... (Sin cambios)
         const select = getEl('restock-product-select');
         const productId = select.value;
         if (!productId) return;
-
         const product = productModels.find(p => p.id === productId);
         if (!product) return;
-
-        // Evitar duplicados
         if (document.querySelector(`.restock-item-card[data-id="${productId}"]`)) {
             showMessage("Ese producto ya está en la lista.");
             return;
         }
-
         const list = getEl('restock-items-list');
         const card = document.createElement('div');
         card.className = 'restock-item-card';
         card.dataset.id = productId;
-        
         const imageUrl = IMAGES_BASE_URL + product.imagenUrl;
-
         card.innerHTML = `
             <img src="${imageUrl}" alt="${product.nombre}" onerror="this.src='https://placehold.co/50x50/e5e5ea/8e8e93?text=N/A'">
             <div class="info">
@@ -1201,36 +1348,34 @@
         `;
         list.appendChild(card);
         calculateRestockTotal();
-        select.value = ''; // Reset dropdown
+        select.value = '';
     }
 
     function calculateRestockTotal() {
+        // ... (Sin cambios)
         let total = 0;
         document.querySelectorAll('.restock-item-card').forEach(card => {
             const quantity = parseInt(card.querySelector('.restock-quantity').value) || 0;
             const cost = parseFloat(card.querySelector('.restock-cost').value) || 0;
             total += quantity * cost;
         });
-        
         const shippingCost = parseFloat(getEl('restock-shipping-cost').value) || 0;
         total += shippingCost;
-        
         getEl('restock-total-display').textContent = `$${total.toFixed(2)}`;
     }
 
     getEl('add-restock-form').addEventListener('submit', async (e) => {
+        // ... (Sin cambios)
         e.preventDefault();
         const btn = e.target.querySelector('button[type="submit"]');
         const lines = document.querySelectorAll('.restock-item-card');
         const restockItems = [];
         let totalCost = parseFloat(getEl('restock-shipping-cost').value) || 0;
-        
         lines.forEach(card => {
             const productId = card.dataset.id;
             const quantity = parseInt(card.querySelector('.restock-quantity').value);
             const cost = parseFloat(card.querySelector('.restock-cost').value);
             const product = productModels.find(p => p.id === productId);
-            
             if (productId && product && quantity > 0 && cost >= 0) {
                 restockItems.push({ 
                     id: productId, 
@@ -1241,19 +1386,15 @@
                 totalCost += quantity * cost;
             }
         });
-
         if (restockItems.length === 0) {
             showMessage("Debes agregar al menos un producto para el re-stock.");
             return;
         }
-
         btn.disabled = true;
         btn.textContent = "Registrando...";
-
         try {
             const batch = db.batch();
             const restockRef = db.collection('restocks').doc();
-            
             batch.set(restockRef, {
                 items: restockItems,
                 costoTotal: totalCost,
@@ -1261,22 +1402,17 @@
                 fecha: firebase.firestore.FieldValue.serverTimestamp(),
                 folio: `RS-${Date.now()}`
             });
-
             restockItems.forEach(item => {
                 const productRef = db.collection('productos').doc(item.id);
                 batch.update(productRef, { stock: firebase.firestore.FieldValue.increment(item.cantidad) });
             });
-            
             const finanzasRef = db.collection('finanzas').doc('resumen');
             batch.update(finanzasRef, {
-                capital: firebase.firestore.FieldValue.increment(-totalCost) // Descontar costo del capital
+                capital: firebase.firestore.FieldValue.increment(-totalCost)
             });
-            
             await batch.commit();
-
             showMessage('¡Re-stock registrado y stock actualizado con éxito!');
-            showPage('inventory-screen'); // Volver al inventario
-
+            showPage('inventory-screen');
         } catch (error) {
             console.error("Error al registrar re-stock:", error);
             showMessage('Hubo un error al registrar el re-stock: ' + error.message);
@@ -1287,7 +1423,7 @@
     });
 
 
-    // --- LÓGICA DE MODALES (NUEVA) ---
+    // --- LÓGICA DE MODALES ---
     
     function showMessage(text, title = "Aviso") {
         getEl('message-title').textContent = title;
@@ -1302,7 +1438,6 @@
     function showConfirm(text, onConfirm, danger = false) {
         getEl('confirm-text').textContent = text;
         onConfirmCallback = onConfirm;
-        
         const yesButton = getEl('confirm-btn-yes');
         if (danger) {
             yesButton.classList.add('btn-confirm-danger');
@@ -1311,7 +1446,6 @@
             yesButton.classList.remove('btn-confirm-danger');
             yesButton.textContent = "Sí";
         }
-        
         getEl('confirm-modal').style.display = 'flex';
     }
     
