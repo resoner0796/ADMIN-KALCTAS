@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>KalCTas Admin (iOS)</title>
+
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="KalCTas Admin">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* =================================================================
+           NUEVO DISEÑO ESTILO iOS NATIVO - By Gemini ✨
+           ================================================================= */
+        :root {
+            --ios-blue: #007aff;
+            --ios-gray-bg: #f2f2f7;
+            --ios-gray-text: #8e8e93;
+            --ios-label-color: #000000;
+            --ios-secondary-label: rgba(60, 60, 67, 0.6);
+            --ios-separator: #c6c6c8;
+            --ios-white: #ffffff;
+            --ios-red: #ff3b30;
+            --ios-green: #34c759;
+            --ios-blue-dark: #0040dd;
+        }
+
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* --- Estructura General --- */
+        html, body {
+            height: 100%;
+            overflow: hidden; /* Evita el rebote de la página */
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--ios-gray-bg);
+            color: var(--ios-label-color);
+            font-size: 16px;
+            overscroll-behavior-y: none; /* Deshabilita "pull-to-refresh" */
+        }
+
+        /* --- Pantalla de Login --- */
+        #login-screen {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            padding: 24px;
+            background-color: var(--ios-white);
+        }
+        
+        #login-screen img {
+            width: 150px;
+            margin-bottom: 30px;
+        }
+
+        #login-screen h2 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 24px;
+        }
+        
+        #login-form {
+            width: 100%;
+            max-width: 400px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        /* --- Estructura de la App (Post-Login) --- */
+        #app-container {
+            display: none; /* Se muestra al loguearse */
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background-color: var(--ios-gray-bg);
+        }
+
+        #app-header {
+            background: rgba(249, 249, 249, 0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--ios-separator);
+            padding: 12px 16px;
+            padding-top: calc(env(safe-area-inset-top, 0px) + 12px); /* Soporte para notch */
+            text-align: center;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        
+        #app-header h1 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--ios-label-color);
+        }
+
+        #app-content {
+            flex: 1;
+            overflow-y: auto; /* Scroll solo en el contenido */
+            -webkit-overflow-scrolling: touch;
+            padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 60px); /* Espacio para tab bar */
+        }
+
+        .page {
+            display: none; /* Oculta todas las páginas por defecto */
+            padding: 16px;
+        }
+        
+        .page.active {
+            display: block; /* Muestra solo la activa */
+        }
+
+        /* --- Tab Bar (Navegación Nativa) --- */
+        #tab-bar {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: calc(env(safe-area-inset-bottom, 0px) + 60px); /* 60px de alto + soporte para "home bar" */
+            padding-bottom: env(safe-area-inset-bottom, 0px);
+            background: rgba(249, 249, 249, 0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-top: 1px solid var(--ios-separator);
+            z-index: 100;
+        }
+
+        .tab-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 4px;
+            font-size: 0.7rem;
+            font-weight: 500;
+            color: var(--ios-gray-text);
+            background: none;
+            border: none;
+            cursor: pointer;
+            height: 100%;
+        }
+        
+        .tab-item svg {
+            width: 24px;
+            height: 24px;
+            fill: currentColor;
+        }
+
+        .tab-item.active {
+            color: var(--ios-blue);
+        }
+
+        /* --- Componentes UI (iOS Style) --- */
+        
+        /* Inputs y Botones */
+        input[type="email"],
+        input[type="password"],
+        input[type="text"],
+        input[type="number"],
+        input[type="date"],
+        select {
+            width: 100%;
+            padding: 14px 16px;
+            font-size: 1rem;
+            font-family: 'Inter', -apple-system, sans-serif;
+            background-color: var(--ios-white);
+            border: 1px solid var(--ios-separator);
+            border-radius: 10px;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+        
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--ios-blue);
+            box-shadow: 0 0 0 2px rgba(0,122,255,0.2);
+        }
+
+        button.btn, .btn {
+            width: 100%;
+            padding: 14px;
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: var(--ios-white);
+            background-color: var(--ios-blue);
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+        
+        button.btn:hover, .btn:hover {
+            background-color: var(--ios-blue-dark);
+        }
+        
+        button.btn:active, .btn:active {
+            transform: scale(0.98);
+        }
+        
+        button.btn-secondary {
+            background-color: var(--ios-gray-bg);
+            color: var(--ios-blue);
+            border: 1px solid var(--ios-separator);
+        }
+        
+        button.btn-danger {
+            background-color: var(--ios-red);
+        }
+        
+        button.btn-small {
+            padding: 8px 12px;
+            font-size: 0.9rem;
+            width: auto;
+        }
+
+        /* Cards */
+        .card {
+            background: var(--ios-white);
+            border-radius: 12px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+            overflow: hidden;
+        }
+        
+        .card-header {
+            padding: 12px 16px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--ios-secondary-label);
+            text-transform: uppercase;
+            background: #fbfbfb;
+            border-bottom: 1px solid var(--ios-separator);
+        }
+        
+        .card-content {
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .stat-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+        
+        .stat-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 12px;
+            background: var(--ios-gray-bg);
+            border-radius: 10px;
+        }
+        
+        .stat-item label {
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--ios-secondary-label);
+            margin-bottom: 4px;
+        }
+        
+        .stat-item .amount {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--ios-label-color);
+        }
+        
+        .stat-item .amount-profit { color: var(--ios-green); }
+        .stat-item .amount-expense { color: var(--ios-red); }
+
+        .withdraw-item {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            padding: 10px;
+            border: 1px solid var(--ios-separator);
+            border-radius: 10px;
+        }
+        
+        .withdraw-item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .withdraw-item-header label {
+            font-weight: 600;
+        }
+        
+        .withdraw-item-header .amount {
+            font-weight: 600;
+            color: var(--ios-green);
+        }
+        
+        .withdraw-item .input-group {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .withdraw-item .input-group input {
+            flex: 1;
+        }
+        
+        .withdraw-item .input-group button {
+            width: auto;
+            flex-shrink: 0;
+            font-weight: 500;
+        }
+
+    </style>
+</head>
+<body>
+
+    <section id="login-screen">
+        <img src="https://resoner0796.github.io/Tienda-KalCTas/LOGO.png" alt="KalCTas Logo">
+        <h2>Iniciar Sesión</h2>
+        <form id="login-form">
+            <input type="email" id="login-email" placeholder="Correo electrónico" required>
+            <input type="password" id="login-password" placeholder="Contraseña" required>
+            <button type="submit" class="btn">Entrar</button>
+        </form>
+    </section>
+
+    <div id="app-container" style="display: none;">
+        
+        <header id="app-header">
+            <h1 id="header-title">Administración</h1>
+        </header>
+
+        <main id="app-content">
+
+            <section id="admin-screen" class="page">
+                
+                <div class="card">
+                    <div class="card-header">Resumen General</div>
+                    <div class="card-content stat-grid">
+                        <div class="stat-item">
+                            <label>Ventas Totales</label>
+                            <span id="admin-total-sales" class="amount">$0.00</span>
+                        </div>
+                        <div class="stat-item">
+                            <label>Gastos Totales</label>
+                            <span id="admin-total-expenses" class="amount amount-expense">$0.00</span>
+                        </div>
+                        <div class="stat-item">
+                            <label>Utilidad Total</label>
+                            <span id="admin-total-profit" class="amount amount-profit">$0.00</span>
+                        </div>
+                        <div class="stat-item">
+                            <label>Utilidad Negocio</label>
+                            <span id="admin-utilidad-negocio" class="amount amount-profit">$0.00</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">Retirar Ganancias (Socios)</div>
+                    <div class="card-content">
+                        <div class="withdraw-item">
+                            <div class="withdraw-item-header">
+                                <label>Ulises (25%)</label>
+                                <span id="admin-utilidad-ulises" class="amount">$0.00</span>
+                            </div>
+                            <div class="input-group">
+                                <input type="number" id="withdraw-ulises-amount" placeholder="Monto a retirar" step="0.01">
+                                <button class="btn btn-small" onclick="retirarGanancias('Ulises')">Retirar</button>
+                            </div>
+                        </div>
+                        <div class="withdraw-item">
+                            <div class="withdraw-item-header">
+                                <label>Dariana (25%)</label>
+                                <span id="admin-utilidad-dariana" class="amount">$0.00</span>
+                            </div>
+                            <div class="input-group">
+                                <input type="number" id="withdraw-dariana-amount" placeholder="Monto a retirar" step="0.01">
+                                <button class="btn btn-small" onclick="retirarGanancias('Dariana')">Retirar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">Registrar Gasto (Descontar de Utilidad Negocio)</div>
+                    <form id="add-expense-form">
+                        <div class="card-content">
+                            <input type="number" id="expense-amount" placeholder="Monto del Gasto ($)" step="0.01" required>
+                            <select id="expense-concept" required>
+                                <option value="" disabled selected>Selecciona un concepto</option>
+                                </select>
+                            <input type="text" id="expense-note" placeholder="Nota adicional (opcional)">
+                            <button type="submit" class="btn">Registrar Gasto</button>
+                        </div>
+                    </form>
+                </div>
+
+                <button class="btn btn-danger" onclick="logout()">Cerrar Sesión</button>
+
+            </section>
+
+            <section id="inventory-screen" class="page">
+                <div class="card">
+                    <div class="card-content">
+                        <h2>📦 Inventario de Productos</h2>
+                        <p>Próximamente... aquí implementaremos la lógica del inventario que extrajimos del index anterior.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="report-screen" class="page">
+                <div class="card">
+                    <div class="card-content">
+                        <h2>📄 Reporte Detallado</h2>
+                        <p>Próximamente... aquí implementaremos la nueva vista de la tabla de reportes.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="media-screen" class="page">
+                <div class="card">
+                    <div class="card-content">
+                        <h2>🎬 Empaques y Video</h2>
+                        <p>Próximamente... aquí implementaremos la gestión de empaques y el video de la tienda.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="theme-screen" class="page">
+                <div class="card">
+                    <div class="card-content">
+                        <h2>🎨 Tema de la Página</h2>
+                        <p>Próximamente... aquí implementaremos la selección de tema (Halloween, Navidad, etc.).</p>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+
+        <nav id="tab-bar">
+            <button class="tab-item active" onclick="showPage('admin-screen')">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 20h16v-6.2l-8-5.8l-8 5.8V20zM4 9.8l8-5.8l8 5.8V8H4v1.8zM3 21c-.55 0-1-.45-1-1V8c0-.28.11-.53.3-.71c.19-.18.44-.29.7-.29h1V4c0-.55.45-1 1-1h2c.55 0 1 .45 1 1v1h6V4c0-.55.45-1 1-1h2c.55 0 1 .45 1 1v3h1c.26 0 .51.11.7.29c.19.18.3.43.3.71v12c0 .55-.45 1-1 1H3z"/></svg>
+                <span>Admin</span>
+            </button>
+            <button class="tab-item" onclick="showPage('inventory-screen')">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 6v12c0 1.1-.9 2-2 2H6c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2h12c1.1 0 2 .9 2 2zm-2 0H6v12h12V6zM9 10h6c.55 0 1-.45 1-1s-.45-1-1-1H9c-.55 0-1 .45-1 1s.45 1 1 1z"/></svg>
+                <span>Inventario</span>
+            </button>
+            <button class="tab-item" onclick="showPage('report-screen')">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zM6 20V4h7v5h5v11H6zM8 12h8v2H8v-2zm0 4h8v2H8v-2z"/></svg>
+                <span>Reporte</span>
+            </button>
+            <button class="tab-item" onclick="showPage('media-screen')">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 4v16H6V4h12M4 2v20h16V2H4zm5 12l3 3.72L15.46 14l3.54 4.5V19H5v-.5l4-5zM12 10c-1.1 0-2-.9-2-2s.9-2 2-2s2 .9 2 2s-.9 2-2 2z"/></svg>
+                <span>Media</span>
+            </button>
+            <button class="tab-item" onclick="showPage('theme-screen')">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2.5c-5.25 0-9.5 4.25-9.5 9.5s4.25 9.5 9.5 9.5s9.5-4.25 9.5-9.5S17.25 2.5 12 2.5zM4 12c0-4.41 3.59-8 8-8s8 3.59 8 8s-3.59 8-8 8s-8-3.59-8-8zm2 0c0 2.21.9 4.2 2.34 5.66A7.96 7.96 0 0 1 6 12zm2.34-5.66C9.76 7.76 10.82 8.5 11.99 8.5c1.18 0 2.24-.74 2.67-1.84A6.009 6.009 0 0 0 8.34 6.34zM12 20c-3.31 0-6-2.69-6-6s2.69-6 6-6s6 2.69 6 6s-2.69 6-6 6z"/></svg>
+                <span>Tema</span>
+            </button>
+        </nav>
+    </div>
+
+    <div id="message-box" style="display: none; /* ... (estilos de modal omitidos por brevedad) ... */">
+        </div>
+
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+    
+    <script>
+    // =================================================================
+    // JAVASCRIPT DE LA NUEVA APP
+    // =================================================================
+
+    // --- Configuración de Firebase (Extraída del index anterior) ---
+    const firebaseConfig = {
+        apiKey: "AIzaSyDuNHPsYnLD_qmbG2K9ieTIOCX6U4slD1E",
+        authDomain: "tienda-kalctas.firebaseapp.com",
+        projectId: "tienda-kalctas",
+        storageBucket: "tienda-kalctas.firebasestorage.app",
+        messagingSenderId: "374355691085",
+        appId: "1:374355691085:web:18abb15678c7a6870bbe04"
+    };
+
+    // --- Inicialización de Firebase ---
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+    
+    // --- Utilidades ---
+    const getEl = (id) => document.getElementById(id);
+    let unsubscribes = []; // Para limpiar listeners al cambiar de página
+
+    // --- Autenticación ---
+    auth.onAuthStateChanged(user => {
+        if (user) {
+            getEl('login-screen').style.display = 'none';
+            getEl('app-container').style.display = 'flex';
+            // Cargar la página por defecto (Administración)
+            showPage('admin-screen');
+        } else {
+            getEl('login-screen').style.display = 'flex';
+            getEl('app-container').style.display = 'none';
+            // Limpiar listeners si el usuario cierra sesión
+            unsubscribes.forEach(unsub => unsub());
+            unsubscribes = [];
+        }
+    });
+
+    getEl('login-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        try {
+            await auth.signInWithEmailAndPassword(getEl('login-email').value, getEl('login-password').value);
+        } catch (error) { showMessage('Error al iniciar sesión: ' + error.message); }
+    });
+
+    function logout() {
+        if (confirm("¿Seguro que quieres cerrar sesión?")) {
+            auth.signOut();
+        }
+    }
+
+    // --- Navegación Principal (Tab Bar) ---
+    function showPage(pageId) {
+        // Ocultar todas las páginas
+        document.querySelectorAll('.page').forEach(page => page.style.display = 'none');
+        // Mostrar la página activa
+        getEl(pageId).style.display = 'block';
+
+        // Actualizar estado activo del Tab
+        document.querySelectorAll('.tab-item').forEach(tab => tab.classList.remove('active'));
+        const newActiveTab = document.querySelector(`.tab-item[onclick="showPage('${pageId}')"]`);
+        if (newActiveTab) {
+            newActiveTab.classList.add('active');
+        }
+
+        // Actualizar título del Header
+        const pageTitle = newActiveTab ? newActiveTab.querySelector('span').innerText : "Admin";
+        getEl('header-title').innerText = pageTitle;
+        
+        // --- Carga de Datos Incremental ---
+        // Limpiamos listeners anteriores
+        unsubscribes.forEach(unsub => unsub());
+        unsubscribes = [];
+
+        // Cargamos los datos de la página seleccionada
+        if (pageId === 'admin-screen') {
+            loadAdminData();
+            loadExpenseConcepts();
+        } else if (pageId === 'inventory-screen') {
+            // AQUI IRÁ: loadInventoryData();
+        } else if (pageId === 'report-screen') {
+            // AQUI IRÁ: loadReportData();
+        } else if (pageId === 'media-screen') {
+            // AQUI IRÁ: loadMediaData();
+        } else if (pageId === 'theme-screen') {
+            // AQUI IRÁ: loadThemeData();
+        }
+    }
+
+    // --- LÓGICA DE ADMINISTRACIÓN (Implementada) ---
+
+    // Cargar datos financieros
+    function loadAdminData() {
+        const unsub = db.collection('finanzas').doc('resumen').onSnapshot(doc => {
+            const data = doc.data() || {};
+            getEl('admin-total-sales').textContent = `$${(data.ventas || 0).toFixed(2)}`;
+            getEl('admin-total-expenses').textContent = `$${(data.gastos || 0).toFixed(2)}`;
+            getEl('admin-total-profit').textContent = `$${(data.utilidad || 0).toFixed(2)}`;
+            getEl('admin-utilidad-negocio').textContent = `$${(data.utilidadNegocioTotal || 0).toFixed(2)}`;
+            getEl('admin-utilidad-ulises').textContent = `$${(data.utilidadUlisesTotal || 0).toFixed(2)}`;
+            getEl('admin-utilidad-dariana').textContent = `$${(data.utilidadDarianaTotal || 0).toFixed(2)}`;
+        }, error => {
+            console.error("Error al cargar resumen financiero:", error);
+            showMessage("Error al cargar datos de administración.");
+        });
+        unsubscribes.push(unsub);
+    }
+    
+    // Cargar conceptos de gastos
+    function loadExpenseConcepts() {
+        const select = getEl('expense-concept');
+        const unsub = db.collection('conceptosGastos').orderBy('nombre').onSnapshot(snapshot => {
+            select.innerHTML = '<option value="">Selecciona un concepto</option>';
+            snapshot.forEach(doc => {
+                select.innerHTML += `<option value="${doc.data().nombre}">${doc.data().nombre}</option>`;
+            });
+        }, error => {
+            console.error("Error al cargar conceptos de gastos:", error);
+        });
+        unsubscribes.push(unsub);
+    }
+
+    // NUEVA LÓGICA: Retirar Ganancias
+    async function retirarGanancias(socio) {
+        const amountElId = (socio === 'Ulises') ? 'withdraw-ulises-amount' : 'withdraw-dariana-amount';
+        const amountEl = getEl(amountElId);
+        const amount = parseFloat(amountEl.value);
+
+        if (isNaN(amount) || amount <= 0) {
+            showMessage("Por favor, introduce un monto válido para retirar.");
+            return;
+        }
+
+        const confirmRetiro = confirm(`¿Seguro que quieres retirar $${amount.toFixed(2)} de las ganancias de ${socio}?`);
+        if (!confirmRetiro) return;
+
+        const finanzasRef = db.collection('finanzas').doc('resumen');
+        const movimientoRef = db.collection('movimientos').doc();
+        const utilidadField = (socio === 'Ulises') ? 'utilidadUlisesTotal' : 'utilidadDarianaTotal';
+
+        try {
+            await db.runTransaction(async (transaction) => {
+                const finanzasDoc = await transaction.get(finanzasRef);
+                if (!finanzasDoc.exists) throw new Error("Documento de finanzas no encontrado.");
+                
+                const currentUtilidad = finanzasDoc.data()[utilidadField] || 0;
+                if (currentUtilidad < amount) {
+                    throw new Error(`Saldo insuficiente. ${socio} solo tiene $${currentUtilidad.toFixed(2)} disponibles.`);
+                }
+
+                // 1. Registrar el movimiento de retiro (negativo)
+                transaction.set(movimientoRef, {
+                    monto: -amount,
+                    concepto: `Retiro Utilidad ${socio}`,
+                    tipo: 'Retiro',
+                    socio: socio,
+                    fecha: firebase.firestore.FieldValue.serverTimestamp()
+                });
+
+                // 2. Descontar la utilidad del resumen
+                transaction.update(finanzasRef, {
+                    [utilidadField]: firebase.firestore.FieldValue.increment(-amount)
+                });
+            });
+
+            showMessage(`¡Éxito! Se retiraron $${amount.toFixed(2)} de ${socio}.`);
+            amountEl.value = ''; // Limpiar input
+        } catch (error) {
+            console.error("Error al retirar ganancias:", error);
+            showMessage("Error al retirar: " + error.message);
+        }
+    }
+
+    // NUEVA LÓGICA: Registrar Gasto
+    getEl('add-expense-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const monto = parseFloat(getEl('expense-amount').value);
+        const concepto = getEl('expense-concept').value;
+        const nota = getEl('expense-note').value;
+
+        if (isNaN(monto) || monto <= 0 || !concepto) {
+            showMessage("Por favor, completa el monto y el concepto.");
+            return;
+        }
+
+        const finanzasRef = db.collection('finanzas').doc('resumen');
+        const movimientoRef = db.collection('movimientos').doc();
+
+        try {
+            await db.runTransaction(async (transaction) => {
+                // 1. Registrar el movimiento de gasto (negativo)
+                transaction.set(movimientoRef, {
+                    monto: -monto,
+                    concepto: concepto,
+                    tipo: 'Gastos',
+                    nota: nota || null,
+                    fecha: firebase.firestore.FieldValue.serverTimestamp()
+                });
+
+                // 2. Actualizar el resumen financiero
+                transaction.update(finanzasRef, {
+                    gastos: firebase.firestore.FieldValue.increment(monto), // Aumenta el gasto total
+                    utilidadNegocioTotal: firebase.firestore.FieldValue.increment(-monto) // Descuenta de Utilidad Negocio
+                });
+            });
+
+            showMessage(`Gasto de $${monto.toFixed(2)} registrado y descontado de Utilidad Negocio.`);
+            getEl('add-expense-form').reset();
+        } catch (error) {
+            console.error("Error al registrar gasto:", error);
+            showMessage("Error al registrar el gasto: " + error.message);
+        }
+    });
+
+    // --- Modal de Mensajes ---
+    function showMessage(text) {
+        // Implementación simple de alert, para no necesitar el HTML del modal aún
+        alert(text);
+        
+        /* // Implementación futura con modal:
+        const msgBox = getEl('message-box');
+        getEl('message-text').textContent = text;
+        msgBox.style.display = 'flex';
+        */
+    }
+
+    </script>
+</body>
+</html>
