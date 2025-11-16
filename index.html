@@ -15,7 +15,7 @@
     
     <style>
         /* =================================================================
-           NUEVO DISEÑO ESTILO iOS NATIVO - By Gemini ✨
+           DISEÑO ESTILO iOS (Glassmorphism Update) - By Gemini ✨
            ================================================================= */
         :root {
             --ios-blue: #007aff;
@@ -30,6 +30,10 @@
             --ios-green: #34c759;
             --ios-yellow: #ffcc00;
             --ios-blue-dark: #0040dd;
+            
+            /* Glassmorphism Colors */
+            --glass-bg: rgba(249, 249, 249, 0.8);
+            --glass-blur: blur(15px);
         }
 
         *, *::before, *::after {
@@ -78,24 +82,24 @@
 
         /* Header con logo más grande */
         #app-header {
-            background: rgba(249, 249, 249, 0.8);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+            background: var(--glass-bg);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
             border-bottom: 1px solid var(--ios-separator);
-            padding: 10px 16px; /* Ajuste de padding */
+            padding: 10px 16px;
             padding-top: calc(env(safe-area-inset-top, 0px) + 10px);
             text-align: center;
             position: sticky;
             top: 0;
             z-index: 10;
-            height: calc(env(safe-area-inset-top, 0px) + 65px); /* Header más alto */
+            height: calc(env(safe-area-inset-top, 0px) + 80px); /* Header más alto (era 65px) */
             display: flex;
             justify-content: center;
             align-items: center;
         }
         
         #header-logo {
-            height: 45px; /* Logo más grande (antes 30px) */
+            height: 60px; /* Logo más grande (era 45px) */
             object-fit: contain;
         }
 
@@ -129,7 +133,7 @@
             text-align: left;
         }
 
-        /* --- Tab Bar --- */
+        /* --- Tab Bar (Glassmorphism) --- */
         #tab-bar {
             display: flex;
             justify-content: space-around;
@@ -138,9 +142,9 @@
             bottom: 0; left: 0; right: 0;
             height: calc(env(safe-area-inset-bottom, 0px) + 60px);
             padding-bottom: env(safe-area-inset-bottom, 0px);
-            background: rgba(249, 249, 249, 0.8);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+            background: var(--glass-bg);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
             border-top: 1px solid var(--ios-separator);
             z-index: 100;
         }
@@ -237,7 +241,7 @@
         .withdraw-item .input-group input { flex: 1; }
         .withdraw-item .input-group button { width: auto; flex-shrink: 0; font-weight: 500; }
 
-        /* --- Estilos de Inventario (Acordeón) --- */
+        /* --- Estilos de Acordeón (Inventario y Reportes) --- */
         .page-content-list {
             display: flex;
             flex-direction: column;
@@ -296,6 +300,7 @@
             border-top: 1px solid var(--ios-separator);
         }
 
+        /* Estilos de Tarjeta de Producto (Inventario) */
         .product-card {
             background: var(--ios-gray-bg);
             border-radius: 10px;
@@ -310,7 +315,6 @@
             align-items: center;
             gap: 12px;
             padding: 10px;
-            cursor: pointer;
         }
         .product-card-image {
             width: 60px;
@@ -324,6 +328,7 @@
         .product-card-info {
             flex: 1;
             overflow: hidden;
+            cursor: pointer; /* Clickeable para expandir */
         }
         .product-card-info h4 {
             font-size: 1rem;
@@ -431,7 +436,7 @@
             color: var(--ios-green);
         }
         
-        /* --- NUEVO: Estilos de Reportes --- */
+        /* --- Estilos de Reportes --- */
         .report-card-item {
             display: flex;
             justify-content: space-between;
@@ -440,6 +445,11 @@
             border-radius: 10px;
             padding: 12px;
             border: 1px solid var(--ios-separator);
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+        .report-card-item:active {
+            transform: scale(0.98);
         }
         .report-info h5 {
             font-size: 1rem;
@@ -459,9 +469,36 @@
         }
         .report-amount.amount-profit { color: var(--ios-green); }
         .report-amount.amount-expense { color: var(--ios-red); }
+        
+        /* Lista dentro de modal de reporte */
+        #sale-details-modal-content {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            text-align: left;
+        }
+        #sale-details-modal-content p {
+            margin: 0;
+            font-size: 0.9rem;
+            color: var(--ios-secondary-label);
+        }
+        #sale-details-modal-content p strong {
+            color: var(--ios-label-color);
+        }
+        #sale-details-modal-content h5 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-top: 8px;
+        }
+        #sale-details-modal-content ul {
+            list-style: none;
+            padding-left: 0;
+            font-size: 0.9rem;
+            color: var(--ios-secondary-label);
+        }
 
 
-        /* --- Estilos de Modales --- */
+        /* --- Estilos de Modales (Glassmorphism) --- */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -469,8 +506,6 @@
             left: 0; top: 0;
             width: 100%; height: 100%;
             background-color: rgba(0, 0, 0, 0.4);
-            backdrop-filter: blur(5px);
-            -webkit-backdrop-filter: blur(5px);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -478,13 +513,20 @@
         }
         
         .modal-content {
-            background-color: rgba(249, 249, 249, 0.95);
+            background-color: var(--glass-bg); /* Efecto Glass */
+            backdrop-filter: var(--glass-blur); /* Efecto Glass */
+            -webkit-backdrop-filter: var(--glass-blur); /* Efecto Glass */
             border-radius: 14px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.2);
             width: 100%;
             max-width: 300px;
             text-align: center;
             overflow: hidden;
+        }
+        
+        /* Modal más ancho para editar y detalles */
+        .modal-content.modal-wide {
+            max-width: 340px;
         }
 
         .modal-header { padding: 16px 20px 4px 20px; }
@@ -496,6 +538,8 @@
             display: flex;
             flex-direction: column;
             gap: 15px;
+            max-height: 60vh; /* Scroll para modales largos */
+            overflow-y: auto;
         }
         .modal-body input, .modal-body select { font-size: 0.95rem; padding: 10px 12px; }
         .modal-body label {
@@ -514,7 +558,6 @@
         .modal-footer button:first-child { border-left: none; }
         .modal-footer button.btn-confirm-danger { color: var(--ios-red); font-weight: 600; }
         
-        /* Modal de Imagen */
         #image-modal .modal-content-img { width: 100%; max-width: 500px; border-radius: 14px; }
         #image-modal .modal-content { background: none; box-shadow: none; }
         
@@ -526,7 +569,7 @@
     <!--     PANTALLA DE LOGIN   -->
     <!-- ======================= -->
     <section id="login-screen">
-        <img src="" alt="KalCTas Logo"> <!-- Se carga con JS -->
+        <img src="" alt="KalCTas Logo">
         <h2>Iniciar Sesión</h2>
         <form id="login-form">
             <input type="email" id="login-email" placeholder="Correo electrónico" required>
@@ -726,20 +769,18 @@
             <section id="report-screen" class="page">
                 <div class="page-content-list">
                     
-                    <!-- Acordeón de Reporte de Ventas -->
-                    <div class="category-accordion open"> <!-- Abierto por defecto -->
+                    <div class="category-accordion open">
                         <button class="category-header" onclick="toggleCategory(this)">
                             <h4>Reporte de Ventas</h4>
                             <svg class="chevron" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
                         </button>
                         <div class="category-content-wrapper">
                             <div class="category-content-inner" id="sales-report-list">
-                                <!-- Las tarjetas de ventas se cargarán aquí -->
+                                <!-- Tarjetas de ventas (JS) -->
                             </div>
                         </div>
                     </div>
                     
-                    <!-- Acordeón de Historial de Movimientos -->
                     <div class="category-accordion">
                         <button class="category-header" onclick="toggleCategory(this)">
                             <h4>Historial de Movimientos</h4>
@@ -747,7 +788,7 @@
                         </button>
                         <div class="category-content-wrapper">
                             <div class="category-content-inner" id="movements-report-list">
-                                <!-- Los movimientos se cargarán aquí -->
+                                <!-- Tarjetas de movimientos (JS) -->
                             </div>
                         </div>
                     </div>
@@ -842,7 +883,7 @@
     </div>
 
     <div id="edit-product-modal" class="modal-overlay" style="display: none;">
-        <div class="modal-content" style="max-width: 320px;">
+        <div class="modal-content modal-wide"> <!-- modal-wide -->
             <div class="modal-header">
                 <h3>Editar Producto</h3>
             </div>
@@ -869,6 +910,23 @@
                     <button type="submit">Guardar</button>
                 </div>
             </form>
+        </div>
+    </div>
+
+    <!-- NUEVO: Modal de Detalles de Venta -->
+    <div id="sale-details-modal" class="modal-overlay" style="display: none;">
+        <div class="modal-content modal-wide">
+            <div class="modal-header">
+                <h3>Detalles de la Venta</h3>
+            </div>
+            <div class="modal-body">
+                <div id="sale-details-modal-content">
+                    <!-- Contenido cargado por JS -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button onclick="closeSaleDetailsModal()">Cerrar</button>
+            </div>
         </div>
     </div>
 
@@ -967,10 +1025,13 @@
         } else if (pageId === 'report-screen') {
             loadSalesReport();
             loadMovementsReport();
+            // Asegurarse de que el primer acordeón esté abierto
+            const firstAccordion = getEl('report-screen').querySelector('.category-accordion');
+            if (firstAccordion) firstAccordion.classList.add('open');
         }
     }
 
-    // --- LÓGICA DE ADMINISTRACIÓN (Actualizada) ---
+    // --- LÓGICA DE ADMINISTRACIÓN ---
 
     function loadAdminData() {
         const unsub = db.collection('finanzas').doc('resumen').onSnapshot(doc => {
@@ -1079,13 +1140,13 @@
                     CAPITAL_PER_PRODUCT = data.costoPorProducto;
                     getEl('config-product-cost').value = data.costoPorProducto;
                 } else {
-                    getEl('config-product-cost').value = CAPITAL_PER_PRODUCT; // Mostrar default
+                    getEl('config-product-cost').value = CAPITAL_PER_PRODUCT;
                 }
                 if (data.costoEnvio) {
                     SHIPPING_COST = data.costoEnvio;
                     getEl('config-shipping-cost').value = data.costoEnvio;
                 } else {
-                    getEl('config-shipping-cost').value = SHIPPING_COST; // Mostrar default
+                    getEl('config-shipping-cost').value = SHIPPING_COST;
                 }
             }
         } catch (error) {
@@ -1167,11 +1228,11 @@
                     
                     return `
                         <div class="product-card ${!isVisible ? 'hidden' : ''}">
-                            <div class="product-card-main" onclick="toggleDetails(this)">
+                            <div class="product-card-main">
                                 <img src="${imageUrl}" alt="${product.nombre}" class="product-card-image" 
                                      onclick="verImagen('${imageUrl}', event)" 
                                      onerror="this.src='https://placehold.co/60x60/e5e5ea/8e8e93?text=N/A'">
-                                <div class="product-card-info">
+                                <div class="product-card-info" onclick="toggleDetails(this)">
                                     <h4>${product.nombre} ${!isVisible ? '(Oculto)' : ''}</h4>
                                     <span class="stock ${isAgotado ? 'agotado' : ''}">${isAgotado ? 'Agotado' : 'Stock: ' + product.stock}</span>
                                     <span class="price">$${product.precio.toFixed(2)}</span>
@@ -1215,7 +1276,7 @@
     }
 
     function toggleDetails(element) {
-        const details = element.nextElementSibling;
+        const details = element.closest('.product-card-main').nextElementSibling;
         details.style.display = (details.style.display === 'flex') ? 'none' : 'flex';
     }
 
@@ -1320,7 +1381,7 @@
     }
 
     function verImagen(src, event) {
-        if (event) event.stopPropagation(); // Evita que se abra/cierre el acordeón de detalles
+        if (event) event.stopPropagation();
         getEl('modal-image').src = src;
         getEl('image-modal').style.display = 'flex';
     }
@@ -1432,10 +1493,9 @@
                 folio: `RS-${Date.now()}`
             });
 
-            // Log de movimiento de capital
             const movimientoRestockRef = db.collection('movimientos').doc();
             batch.set(movimientoRestockRef, {
-                monto: -totalCost, // Gasto de capital
+                monto: -totalCost,
                 concepto: 'ReStock de Inventario',
                 tipo: 'Capital',
                 nota: `Folio ReStock ${restockRef.id.substring(0, 5)}...`,
@@ -1466,7 +1526,7 @@
         }
     });
 
-    // --- NUEVO: LÓGICA DE REPORTES ---
+    // --- LÓGICA DE REPORTES ---
 
     function loadSalesReport() {
         const listContainer = getEl('sales-report-list');
@@ -1487,6 +1547,7 @@
                     
                     const card = document.createElement('div');
                     card.className = 'report-card-item';
+                    card.onclick = () => showSaleDetails(doc.id); // <-- MODAL AL CLIC
                     card.innerHTML = `
                         <div class="report-info">
                             <h5>${pedido.folio || 'Venta Manual'} (${cliente})</h5>
@@ -1528,7 +1589,7 @@
                             <p>${m.tipo} - ${fecha}</p>
                             ${m.nota ? `<p style="font-size: 0.8em; color: var(--ios-gray-text);">${m.nota}</p>` : ''}
                         </div>
-                        <span class="report-amount ${amountClass}">${amountSign}$${(m.monto || 0).toFixed(2)}</span>
+                        <span class="report-amount ${amountClass}">${amountSign}$${(Math.abs(m.monto) || 0).toFixed(2)}</span>
                     `;
                     listContainer.appendChild(card);
                 });
@@ -1537,6 +1598,76 @@
                 listContainer.innerHTML = '<p>Error al cargar movimientos.</p>';
             });
         unsubscribes.push(unsub);
+    }
+
+    // --- NUEVO: Funciones para Modal de Detalles de Venta ---
+    async function showSaleDetails(pedidoId) {
+        const modal = getEl('sale-details-modal');
+        const contentEl = getEl('sale-details-modal-content');
+        
+        contentEl.innerHTML = '<p>Cargando detalles...</p>';
+        modal.style.display = 'flex';
+
+        try {
+            const doc = await db.collection('pedidos').doc(pedidoId).get();
+            if (!doc.exists) {
+                contentEl.innerHTML = '<p>Error: No se encontró el pedido.</p>';
+                return;
+            }
+            
+            const pedido = doc.data();
+            
+            const cliente = pedido.clienteManual || (pedido.datosCliente?.nombre || 'N/A');
+            const telefono = pedido.datosCliente?.telefono || 'N/A';
+            const fecha = pedido.fechaActualizacion ? pedido.fechaActualizacion.toDate().toLocaleString() : 'N/A';
+            const total = (pedido.montoTotal || 0).toFixed(2);
+            
+            const productsHtml = (pedido.productos || []).map(p => 
+                `<li>${p.nombre} (x${p.cantidad || 1}) - $${(p.precio * (p.cantidad || 1)).toFixed(2)}</li>`
+            ).join('');
+            
+            const deliveryHtml = formatDeliveryDetails(pedido);
+
+            contentEl.innerHTML = `
+                <p><strong>Folio:</strong> ${pedido.folio || 'Venta Manual'}</p>
+                <p><strong>Cliente:</strong> ${cliente}</p>
+                <p><strong>Teléfono:</strong> ${telefono}</p>
+                <p><strong>Canal:</strong> ${pedido.canalVenta || 'Tienda'}</p>
+                <p><strong>Fecha:</strong> ${fecha}</p>
+                <p><strong>Total:</strong> <strong style="color:var(--ios-green)">$${total}</strong></p>
+                
+                <h5>Productos:</h5>
+                <ul>${productsHtml}</ul>
+                
+                <h5>Entrega:</h5>
+                ${deliveryHtml}
+            `;
+
+        } catch (error) {
+            console.error("Error al mostrar detalles de venta:", error);
+            contentEl.innerHTML = `<p>Error al cargar detalles: ${error.message}</p>`;
+        }
+    }
+    
+    function closeSaleDetailsModal() {
+        getEl('sale-details-modal').style.display = 'none';
+    }
+
+    function formatDeliveryDetails(pedido) {
+        const datos = pedido.datosEntrega;
+        if (!datos) return '<p>No hay detalles de entrega.</p>';
+        
+        let html = `<p><strong>Método:</strong> ${datos.tipo || 'N/A'}</p>`;
+        if (datos.tipo === 'Envío a domicilio') {
+            html += `<p><strong>Dirección:</strong> ${datos.calle || ''}, ${datos.colonia || ''}</p>`;
+            if (datos.descripcion) html += `<p><strong>Ref:</strong> ${datos.descripcion}</p>`;
+        } else if (datos.tipo === 'Punto medio') {
+            html += `<p><strong>Lugar:</strong> ${datos.lugar || 'N/A'}</p>`;
+            html += `<p><strong>Fecha:</strong> ${datos.fecha || 'N/A'}</p>`;
+        }
+        if (pedido.comentarios) html += `<p><strong>Comentarios:</strong> ${pedido.comentarios}</p>`;
+        
+        return html;
     }
 
 
